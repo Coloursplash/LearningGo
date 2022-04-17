@@ -4,7 +4,7 @@ The Go programming language is perfect for console applications as well as serve
 
 This repository is where I have been learning the Go programming language. Feel free to look around!
 
-Not only can this teach you some fundementals of Rust, but it can be a great revision guide if you forget something in the future.
+Not only can this teach you some fundementals of Go, but it can be a great revision guide if you forget something in the future.
 
 # Notes
 

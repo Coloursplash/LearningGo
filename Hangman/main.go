@@ -8,9 +8,19 @@ import (
 	"unicode"
 )
 
-func str_in_slice(str string, s []string) bool {
+func rune_in_slice(c rune, arr []rune) bool {
+	for _, v := range arr {
+		if v == c {
+			return true
+		}
+	}
+
+	return false
+}
+
+func char_in_string(c rune, s string) bool {
 	for _, v := range s {
-		if v == str {
+		if v == c {
 			return true
 		}
 	}
@@ -24,7 +34,7 @@ func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 	word := words[rand.Intn(len(words))]
 
-	guessed_letters := make([]string, 0)
+	guessed_letters := make([]rune, 0)
 
 	guess := 6
 	exit := false
@@ -34,8 +44,8 @@ func main() {
 		fmt.Println(guess, "guesses left")
 
 		for _, c := range word {
-			if str_in_slice(string(c), guessed_letters) {
-				fmt.Print(c)
+			if rune_in_slice(c, guessed_letters) {
+				fmt.Print(string(c))
 			} else {
 				fmt.Print("_")
 			}
@@ -43,20 +53,35 @@ func main() {
 		fmt.Println()
 
 		fmt.Println("Enter a letter:")
-		var char rune
-		fmt.Scanln(&char)
+		var input string
+		fmt.Scanln(&input)
+		input = strings.ToLower(input)
 
-		if str_in_slice(string(char), guessed_letters) || unicode.IsLetter(char) {
+		// check for empty inputs
+		if input == "" {
+			continue
+		}
+		char := []rune(input)[0]
+
+		if rune_in_slice(char, guessed_letters) || !unicode.IsLetter(char) {
+			fmt.Println()
+			if !unicode.IsLetter(char) {
+				fmt.Println("Only enter lowercase letters!")
+			} else {
+				fmt.Println("You've already guessed that")
+			}
 			continue
 		}
 
-		if !strings.ContainsRune(word, char) {
+		guessed_letters = append(guessed_letters, char)
+
+		if !char_in_string(char, word) {
 			guess--
 		}
 
 		exit = true
 		for _, c := range word {
-			if !str_in_slice(string(c), guessed_letters) {
+			if !rune_in_slice(c, guessed_letters) {
 				exit = false
 			}
 		}
